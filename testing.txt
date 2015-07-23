@@ -1,0 +1,2 @@
+This is another text file
+We can edit it
