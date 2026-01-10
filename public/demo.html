@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cesium 3D Globe Demo</title>
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body, #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(42, 42, 42, 0.9);
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      z-index: 1000;
+      max-width: 300px;
+    }
+
+    #info h2 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    #info p {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="info">
+    <h2>Cesium 3D Globe</h2>
+    <p><strong>Controls:</strong></p>
+    <p>• Left click + drag: Rotate</p>
+    <p>• Right click + drag: Pan</p>
+    <p>• Scroll: Zoom</p>
+    <p>• Middle click + drag: Tilt</p>
+  </div>
+
+  <script>
+    // Set your Cesium Ion access token
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFkNjc5YzYiLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NTE4Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
+
+    // Create the Cesium Viewer
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      baseLayerPicker: true,
+      geocoder: true,
+      homeButton: true,
+      sceneModePicker: true,
+      navigationHelpButton: true,
+      animation: false,
+      timeline: false,
+      fullscreenButton: true,
+    });
+
+    // Load world terrain
+    Cesium.createWorldTerrainAsync().then(function(terrainProvider) {
+      viewer.terrainProvider = terrainProvider;
+    });
+
+    // Optional: Add a marker or point of interest
+    viewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(-74.0060, 40.7128),
+      point: {
+        pixelSize: 10,
+        color: Cesium.Color.RED,
+        outlineColor: Cesium.Color.WHITE,
+        outlineWidth: 2
+      },
+      label: {
+        text: 'New York City',
+        font: '14pt sans-serif',
+        fillColor: Cesium.Color.WHITE,
+        outlineColor: Cesium.Color.BLACK,
+        outlineWidth: 2,
+        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        pixelOffset: new Cesium.Cartesian2(0, -10)
+      }
+    });
+
+    // Fly to New York
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(-74.0060, 40.7128, 10000000)
+    });
+  </script>
+</body>
+</html>
